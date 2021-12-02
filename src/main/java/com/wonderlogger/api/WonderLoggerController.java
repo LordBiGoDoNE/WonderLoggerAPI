@@ -3,6 +3,7 @@ package com.wonderlogger.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class WonderLoggerController {
 
