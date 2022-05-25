@@ -1,101 +1,42 @@
 package com.wonderlogger.api;
 
-import com.google.gson.Gson;
-
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "wonderexception")
 public class WonderException {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String software;
-    private String versao;
-    private String classe;
+    private long id;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_software", referencedColumnName = "id")
+    private Software software;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_version", referencedColumnName = "id")
+    private SoftwareVersion softwareVersion;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_class", referencedColumnName = "id")
+    private SoftwareClass softwareClass;
+    @OneToOne(targetEntity = ExceptionType.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_exceptiontype", referencedColumnName = "id")
+    private ExceptionType exceptionType;
     private Date dateHour;
-    private String causa;
+    @Lob
     private String message;
+    @Lob
+    private String stacktrace;
+
+    public WonderException(Software software, SoftwareVersion softwareVersion, SoftwareClass softwareClass, ExceptionType exceptionType, Date dateHour, String message, String stacktrace) {
+        this.software = software;
+        this.softwareVersion = softwareVersion;
+        this.softwareClass = softwareClass;
+        this.exceptionType = exceptionType;
+        this.dateHour = dateHour;
+        this.message = message;
+        this.stacktrace = stacktrace;
+    }
 
     public WonderException() {
-    }
-
-    public WonderException(String software, String versao, String classe, Date dateHour, String causa, String message) {
-        this.software = software;
-        this.versao = versao;
-        this.classe = classe;
-        this.dateHour = dateHour;
-        this.causa = causa;
-        this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public WonderException setId(int id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getSoftware() {
-        return software;
-    }
-
-    public WonderException setSoftware(String software) {
-        this.software = software;
-        return this;
-    }
-
-    public String getVersao() {
-        return versao;
-    }
-
-    public WonderException setVersao(String versao) {
-        this.versao = versao;
-        return this;
-    }
-
-    public String getClasse() {
-        return classe;
-    }
-
-    public WonderException setClasse(String classe) {
-        this.classe = classe;
-        return this;
-    }
-
-    public Date getDateHour() {
-        return dateHour;
-    }
-
-    public WonderException setDateHour(Date dateHour) {
-        this.dateHour = dateHour;
-        return this;
-    }
-
-    public String getCausa() {
-        return causa;
-    }
-
-    public WonderException setCausa(String causa) {
-        this.causa = causa;
-        return this;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public WonderException setMessage(String message) {
-        this.message = message;
-        return this;
     }
 }

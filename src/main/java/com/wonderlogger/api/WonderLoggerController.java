@@ -1,5 +1,7 @@
 package com.wonderlogger.api;
 
+import com.wonderlogger.model.GetExceptionsRequestBody;
+import com.wonderlogger.model.ImportExceptionRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,23 +12,38 @@ public class WonderLoggerController {
     @Autowired
     WonderLoggerService wonderLoggerService;
 
-    @RequestMapping(value = "/get/{software}/{versao}", method = RequestMethod.GET)
-    public String Get(
-            @PathVariable("software") String software,
-            @PathVariable("versao") String versao) {
-        return wonderLoggerService.getExceptions(software, versao);
+    @RequestMapping(value = "/getsoftware", method = RequestMethod.GET)
+    public String getSoftwareList() {
+        return wonderLoggerService.getSoftwareList();
     }
 
-    @RequestMapping(value = "/get/{software}/{versao}/{classe}", method = RequestMethod.GET)
-    public String Get(
-            @PathVariable("software") String software,
-            @PathVariable("versao") String versao,
-            @PathVariable("classe") String classe) {
-        return wonderLoggerService.getExceptions(software, versao, classe);
+    @RequestMapping(value = "/getversion/{software}", method = RequestMethod.GET)
+    public String getVersionList(
+            @PathVariable("software") long software) {
+        return wonderLoggerService.getVersionList(software);
     }
 
-    @PostMapping(value = "/importException", consumes = "application/json")
-    public String criarWonderException(@RequestBody WonderException wE) {
-        return wonderLoggerService.saveWonderException(wE);
+    @RequestMapping(value = "/getexceptionstype/{software}/{versao}", method = RequestMethod.GET)
+    public String getExceptionsType(
+            @PathVariable("software") long software,
+            @PathVariable("versao") long versao) {
+        return wonderLoggerService.getExceptionsType(software, versao);
+    }
+
+    @RequestMapping(value = "/getsoftwareclasses/{software}/{versao}", method = RequestMethod.GET)
+    public String getSoftwareClasses(
+            @PathVariable("software") long software,
+            @PathVariable("versao") long versao) {
+        return wonderLoggerService.getSoftwareClasses(software, versao);
+    }
+
+    @PostMapping(value = "/getwonderexceptions", consumes = "application/json")
+    public String getExceptions(@RequestBody GetExceptionsRequestBody getExceptionsRequestBody) {
+        return wonderLoggerService.getWonderExceptions(getExceptionsRequestBody);
+    }
+
+    @PostMapping(value = "/importexception", consumes = "application/json")
+    public String criarWonderException(@RequestBody ImportExceptionRequestBody importExceptionRequestBody) {
+        return wonderLoggerService.saveWonderException(importExceptionRequestBody);
     }
 }
